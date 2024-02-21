@@ -15,12 +15,14 @@ func main() {
 }
 
 func maxSubArray(nums []int) int {
+	// 定义imax[i]是必须包含nums[i]情况下能生成的最大数组和
 	var imax = make([]int, len(nums))
 	res := nums[0]
 	for i := 0; i < len(nums); i++ {
 		if i == 0 {
 			imax[i] = nums[i]
 		} else {
+			// 要么加上nums[i]，要么直接选择nums[i]
 			imax[i] = maxTwo(imax[i-1]+nums[i], nums[i])
 		}
 		res = maxTwo(res, imax[i])

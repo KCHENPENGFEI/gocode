@@ -15,11 +15,13 @@ func main() {
 }
 
 func lengthOfLIS(nums []int) int {
+	// 定义dp[i]是包含nums[i]情况最长子序列长度
 	var dp = make([]int, len(nums))
 	for i := 0; i < len(nums); i++ {
 		if i == 0 {
 			dp[i] = 1
 		} else {
+			// 需要遍历前面所有的dp值进行大小判断
 			for j := i - 1; j >= 0; j-- {
 				if nums[j] < nums[i] {
 					dp[i] = maxTwo(dp[i], dp[j]+1)

@@ -5,14 +5,21 @@ import "fmt"
 /**
  * @Author: chenpengfei
  * @Date: 2024/2/3 下午3:32
- * @Desc:
- */
+ * @Desc: 416. 分割等和子集
+给你一个 只包含正整数 的 非空 数组 nums 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+
+*/
 
 func main() {
 	nums := []int{9, 1, 2, 4, 10}
 	fmt.Println(canPartition(nums))
 }
 
+// canPartition
+//
+//	@Description: 本质是一个0-1背包问题
+//	@param nums
+//	@return bool
 func canPartition(nums []int) bool {
 	sum := 0
 	for _, num := range nums {

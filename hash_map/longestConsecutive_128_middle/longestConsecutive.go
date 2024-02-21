@@ -5,7 +5,7 @@ import "fmt"
 /**
  * @Author: chenpengfei
  * @Date: 2023/8/27 上午10:34
- * @Desc:
+ * @Desc: 最长连续序列
  */
 
 func main() {
@@ -13,6 +13,13 @@ func main() {
 	fmt.Println(longestConsecutive(nums))
 }
 
+// longestConsecutive
+//
+//		@Description: 做法: 1. 首先使用HashSet对数组进行去重
+//	  - 2. 遍历数组每一个元素i，如果HashSet中存在i-1这个数字，说明元素i肯定不是构成最长序列的第一个元素，直接跳过
+//	  - 3. 如果元素i是第一个元素，那么考察i+1、i+2、...是否在HashSet中，然后统计长度即可
+//	    @param nums
+//	    @return int
 func longestConsecutive(nums []int) int {
 	hashMap := make(map[int]struct{})
 	maxLen := 0

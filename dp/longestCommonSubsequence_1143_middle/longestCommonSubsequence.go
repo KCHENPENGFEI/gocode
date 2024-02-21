@@ -71,3 +71,28 @@ func maxTwo(a, b int) int {
 	}
 	return b
 }
+
+// longestCommonSubsequence1
+//
+//	@Description: 可以定义dp[i][j]是s1[0...i-1]和s2[0...j-1]的最长公共子串的长度
+//	这样可以减少初始化过程，此时i和j都是从1开始
+//	@param text1
+//	@param text2
+//	@return int
+func longestCommonSubsequence1(text1 string, text2 string) int {
+	m, n := len(text1), len(text2)
+	var dp = make([][]int, m+1)
+	for i := 0; i < len(dp); i++ {
+		dp[i] = make([]int, n+1)
+	}
+	for i := 1; i < m+1; i++ {
+		for j := 1; j < n+1; j++ {
+			if text1[i-1] == text2[j-1] {
+				dp[i][j] = dp[i-1][j-1] + 1
+			} else {
+				dp[i][j] = maxTwo(dp[i-1][j], dp[i][j-1])
+			}
+		}
+	}
+	return dp[m][n]
+}

@@ -8,36 +8,47 @@ import (
 /**
  * @Author: chenpengfei
  * @Date: 2023/10/21 下午3:22
- * @Desc:
- */
+ * @Desc: 543. 二叉树的直径
+给你一棵二叉树的根节点，返回该树的 直径 。
+
+二叉树的 直径 是指树中任意两个节点之间最长路径的 长度 。这条路径可能经过也可能不经过根节点 root 。
+
+两节点之间路径的 长度 由它们之间边数表示。
+*/
 
 func main() {
 	tree := TreeNode{
-		Val: 1,
-		//Left: &TreeNode{Val: 2},
-		//Right: &TreeNode{Val: 3},
+		Val:   1,
+		Left:  &TreeNode{Val: 2},
+		Right: &TreeNode{Val: 3},
 	}
 	fmt.Println(diameterOfBinaryTree(&tree))
 }
 
-var ans int = 0
-
+// diameterOfBinaryTree
+//
+//	@Description: 经过根节点的直径为左子树树高+右子树树高
+//	@param root
+//	@return int
 func diameterOfBinaryTree(root *TreeNode) int {
-	depth(root)
+	var ans int
+	help(root, &ans)
 	return ans
 }
 
-func depth(root *TreeNode) int {
+func help(root *TreeNode, ans *int) int {
 	if root == nil {
 		return 0
 	}
-	l := depth(root.Left)
-	r := depth(root.Right)
-	ans = max(ans, l+r)
-	return max(l, r) + 1
+	l := help(root.Left, ans)
+	r := help(root.Right, ans)
+	// 计算经过当前root的直径
+	*ans = maxTwo(*ans, l+r)
+	// 返回树高
+	return maxTwo(l, r) + 1
 }
 
-func max(a, b int) int {
+func maxTwo(a, b int) int {
 	if a > b {
 		return a
 	}
