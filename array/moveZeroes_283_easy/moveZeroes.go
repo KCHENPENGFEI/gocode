@@ -10,8 +10,8 @@ import "fmt"
 */
 
 func main() {
-	nums := []int{0, 2}
-	moveZeroes(nums)
+	nums := []int{0, 1, 9, 3, 12}
+	moveZeroes2(nums)
 	fmt.Println(nums)
 }
 
@@ -54,4 +54,25 @@ func findJ(nums []int, start int) int {
 		}
 	}
 	return -1
+}
+
+// moveZeroes2
+//
+//	@Description: 二刷
+//	@param nums
+func moveZeroes2(nums []int) {
+	fristZero := -1
+	for i := 0; i < len(nums); i++ {
+		if fristZero == -1 && nums[i] == 0 {
+			fristZero = i
+		}
+		if nums[i] != 0 && fristZero != -1 {
+			// 交换位置
+			nums[i], nums[fristZero] = nums[fristZero], nums[i]
+			// 因为交换了位置所以当前fristZero肯定不是0了，++之后必然是0的位置
+			// 如果交换的位置相邻，那么++之后肯定是0
+			// 如果交换的位置不相邻，那么++之后就是没有移动过的数组的0
+			fristZero++
+		}
+	}
 }

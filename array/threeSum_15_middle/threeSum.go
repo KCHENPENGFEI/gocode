@@ -12,8 +12,8 @@ import (
  */
 
 func main() {
-	nums := []int{-1, 0, 1, 2, -1, -4}
-	fmt.Println(threeSum(nums))
+	nums := []int{}
+	fmt.Println(threeSum2(nums))
 }
 
 type triple struct {
@@ -62,5 +62,50 @@ func threeSum(nums []int) [][]int {
 		}
 	}
 	return r
+
+}
+
+// threeSum2
+//
+//	@Description: 二刷，双指针
+//	@param nums
+//	@return [][]int
+func threeSum2(nums []int) [][]int {
+	sort.Ints(nums)
+	var result [][]int
+	for i := 0; i < len(nums)-2; i++ {
+		if nums[i] > 0 {
+			// 剪枝快速返回
+			return result
+		}
+		if i > 0 && nums[i] == nums[i-1] {
+			// 重复
+			continue
+		}
+		j, k := i+1, len(nums)-1
+		for j < k {
+			sum := nums[i] + nums[j] + nums[k]
+			if sum == 0 {
+				// 说明找到了有效的三元组
+				result = append(result, []int{nums[i], nums[j], nums[k]})
+				for j < k && nums[j] == nums[j+1] {
+					// j指针重复则继续累加，找到第一个不重复的
+					j++
+				}
+				for j < k && nums[k] == nums[k-1] {
+					// 同理找到第一个不重复的k
+					k--
+				}
+				// 在这里才找到
+				j++
+				k--
+			} else if sum < 0 {
+				j++
+			} else {
+				k--
+			}
+		}
+	}
+	return result
 
 }

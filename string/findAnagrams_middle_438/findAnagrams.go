@@ -51,3 +51,29 @@ func buildMap(start, end int, s string) map[byte]int {
 	}
 	return m
 }
+
+func findAnagrams2(s string, p string) []int {
+	var result []int
+	lenS, lenP := len(s), len(p)
+	if lenS < lenP {
+		return nil
+	}
+	var sCount, pCount [26]int
+	// 初始化sCount和pCount
+	for i := 0; i < lenP; i++ {
+		sCount[s[i]-'a']++
+		pCount[p[i]-'a']++
+	}
+	if sCount == pCount {
+		result = append(result, 0)
+	}
+
+	for i := 0; i < lenS-lenP; i++ {
+		sCount[s[i]-'a']--
+		sCount[s[i+lenP]-'a']++
+		if sCount == pCount {
+			result = append(result, i+1)
+		}
+	}
+	return result
+}
