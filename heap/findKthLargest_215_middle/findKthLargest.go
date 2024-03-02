@@ -49,3 +49,45 @@ func adjust(num []int, parent int) {
 		adjust(num, idx)
 	}
 }
+
+// findKthLargest2
+//
+//	@Description: 二刷
+//	@param nums
+//	@param k
+//	@return int
+func findKthLargest2(nums []int, k int) int {
+	// 构建一个大根堆
+	buildHeap(nums)
+	for i := 0; i < k-1; i++ {
+		// 交换顶部和尾部的数据，然后删除尾部数据
+		nums[0], nums[len(nums)-1] = nums[len(nums)-1], nums[0]
+		nums = nums[0 : len(nums)-1]
+		adjust2(nums, 0)
+	}
+	return nums[0]
+}
+
+func buildHeap(nums []int) {
+	// 一定要从底部往上开始调整
+	// 大顶堆构建过程就是先从底部往上构建，然后针对每个节点都需要从顶部往下调整
+	for i := len(nums) / 2; i >= 0; i-- {
+		adjust2(nums, i)
+	}
+}
+
+func adjust2(nums []int, rootIndex int) {
+	// 将根节点下标为rootIndex的二叉树调整为大根堆
+	left, right := 2*rootIndex+1, 2*(rootIndex+1)
+	idx := rootIndex
+	if left < len(nums) && nums[left] > nums[rootIndex] {
+		idx = left
+	}
+	if right < len(nums) && nums[right] > nums[idx] {
+		idx = right
+	}
+	if idx != rootIndex {
+		nums[idx], nums[rootIndex] = nums[rootIndex], nums[idx]
+		adjust2(nums, idx)
+	}
+}

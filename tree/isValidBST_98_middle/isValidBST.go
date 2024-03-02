@@ -57,3 +57,24 @@ func max(a, b int) int {
 	}
 	return b
 }
+
+// isValidBST2
+//
+//	@Description: 二刷
+//	@param root
+//	@return bool
+func isValidBST2(root *TreeNode) bool {
+	min, max := math.MinInt64, math.MaxInt64
+	return helper(root, min, max)
+}
+
+func helper2(root *TreeNode, min, max int) bool {
+	if root == nil {
+		return true
+	}
+	if root.Val >= max || root.Val <= min {
+		return false
+	}
+	// 这里直接使用root.val作为左子树和右子树的min/max条件即可，不用再额外判断大小了
+	return helper2(root.Left, min, root.Val) && helper2(root.Right, root.Val, max)
+}

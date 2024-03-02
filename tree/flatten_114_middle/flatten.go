@@ -41,3 +41,40 @@ func travel(root *TreeNode) []*TreeNode {
 	r = append(r, travel(root.Right)...)
 	return r
 }
+
+// flatten2
+//
+//	@Description: 二刷使用递归
+//	@param root
+func flatten2(root *TreeNode) {
+	helper(root)
+}
+
+// helper
+//
+//	@Description: 先进行递归左右子树，然后将右子树替换成左子树
+//
+// 再遍历找到当前右子树的最右下角节点，将原来的右子树拼接上去，然后使root的左子树为空
+//
+//	@param root
+//	@return *TreeNode
+func helper(root *TreeNode) *TreeNode {
+	if root == nil || (root.Left == nil && root.Right == nil) {
+		return root
+	}
+	// 递归处理左子树
+	left := helper(root.Left)
+	helper(root.Right)
+
+	tmp := root.Right
+	// 右子树替换成左子树
+	root.Right = left
+	p := root
+	for p.Right != nil {
+		u
+		p = p.Right
+	}
+	p.Right = tmp
+	root.Left = nil
+	return root
+}

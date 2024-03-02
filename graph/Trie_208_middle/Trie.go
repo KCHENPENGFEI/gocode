@@ -9,16 +9,15 @@ import "fmt"
  */
 
 type Trie struct {
-	Value *byte
-	Sub   map[byte]*Trie
+	Val   *byte
+	Son   map[byte]*Trie
 	IsEnd bool
 }
 
 func Constructor() Trie {
 	return Trie{
-		Value: nil,
-		Sub:   make(map[byte]*Trie),
-		IsEnd: false,
+		Val: nil,
+		Son: make(map[byte]*Trie),
 	}
 }
 
@@ -26,45 +25,41 @@ func (this *Trie) Insert(word string) {
 	cur := this
 	for i := 0; i < len(word); i++ {
 		c := word[i]
-		if v, ok := cur.Sub[c]; ok {
-			// 已经存在
-			cur = v
+		if node, ok := cur.Son[c]; ok {
+			cur = node
 		} else {
-			// 不存在插入
-			t := Trie{
-				Value: &c,
-				Sub:   make(map[byte]*Trie),
+			_node := &Trie{
+				Val: &c,
+				Son: make(map[byte]*Trie),
 			}
-			cur.Sub[c] = &t
-			cur = &t
+			cur.Son[c] = _node
+			cur = _node
+		}
+		if i == len(word)-1 {
+			cur.IsEnd = true
 		}
 	}
-	cur.IsEnd = true
 }
 
 func (this *Trie) Search(word string) bool {
-	cur := this
 	for i := 0; i < len(word); i++ {
 		c := word[i]
-		if v, ok := cur.Sub[c]; !ok {
-			return false
+		if node, ok := this.Son[c]; ok {
+			this = node
 		} else {
-			// 存在
-			cur = v
+			return false
 		}
 	}
-	return cur.IsEnd
+	return this.IsEnd
 }
 
 func (this *Trie) StartsWith(prefix string) bool {
-	cur := this
 	for i := 0; i < len(prefix); i++ {
 		c := prefix[i]
-		if v, ok := cur.Sub[c]; !ok {
-			return false
+		if node, ok := this.Son[c]; ok {
+			this = node
 		} else {
-			// 存在
-			cur = v
+			return false
 		}
 	}
 	return true
@@ -72,10 +67,9 @@ func (this *Trie) StartsWith(prefix string) bool {
 
 func main() {
 	trie := Constructor()
-	trie.Insert("apple")
-	fmt.Println(trie.Search("apple"))
-	fmt.Println(trie.Search("app"))
-	fmt.Println(trie.StartsWith("app"))
-	trie.Insert("app")
-	fmt.Println(trie.Search("app"))
+	trie.Insert("ab")
+	fmt.Println(trie.Search("a"))
+	fmt.Println(trie.Search("ab"))
+	fmt.Println(trie.StartsWith("a"))
+	fmt.Println(trie.StartsWith("ab"))
 }

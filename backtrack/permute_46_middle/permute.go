@@ -46,3 +46,35 @@ func dfs(track []int, trackSet map[int]struct{}, nums []int, n int, result *[][]
 		delete(trackSet, num)
 	}
 }
+
+// permute2
+//
+//	@Description: 二刷
+//	@param nums
+//	@return [][]int
+func permute2(nums []int) [][]int {
+	set := make(map[int]struct{})
+	var path []int
+	result := new([][]int)
+	trackback(nums, set, path, result)
+	return *result
+}
+
+func trackback(nums []int, set map[int]struct{}, path []int, res *[][]int) {
+	if len(path) == len(nums) {
+		c := make([]int, len(path))
+		copy(c, path)
+		*res = append(*res, c)
+		return
+	}
+
+	for i := 0; i < len(nums); i++ {
+		if _, ok := set[nums[i]]; !ok {
+			set[nums[i]] = struct{}{}
+			path = append(path, nums[i])
+			trackback(nums, set, path, res)
+			path = path[:len(path)-1]
+			delete(set, nums[i])
+		}
+	}
+}

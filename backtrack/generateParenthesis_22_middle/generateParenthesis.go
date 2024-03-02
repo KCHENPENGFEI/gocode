@@ -43,3 +43,39 @@ func dfs(result *[]string, n int, track []byte, left, right int) {
 		track = track[:len(track)-1]
 	}
 }
+
+// generateParenthesis2
+//
+//	@Description: 二刷
+//	@param n
+//	@return []string
+func generateParenthesis2(n int) []string {
+	var path []byte
+	res := new([]string)
+	helper(n, n, n, path, res)
+	return *res
+}
+
+func helper(left, right, n int, path []byte, res *[]string) {
+	if len(path) == 2*n {
+		*res = append(*res, string(path))
+		return
+	}
+
+	if left > right {
+		// 说明左括号不够直接剪枝
+		return
+	}
+
+	if left > 0 {
+		path = append(path, '(')
+		helper(left-1, right, n, path, res)
+		path = path[:len(path)-1]
+	}
+	if right > 0 {
+		path = append(path, ')')
+		helper(left, right-1, n, path, res)
+		path = path[:len(path)-1]
+	}
+
+}

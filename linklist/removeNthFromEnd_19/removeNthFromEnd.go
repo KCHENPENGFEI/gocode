@@ -36,3 +36,26 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 	p2.Next = p2.Next.Next
 	return dummy.Next
 }
+
+// removeNthFromEnd2
+//
+//	@Description: 二刷
+//	@param head
+//	@param n
+//	@return *ListNode
+func removeNthFromEnd2(head *ListNode, n int) *ListNode {
+	dummy := new(ListNode)
+	dummy.Next = head
+	p := head
+	for i := 0; i < n; i++ {
+		p = p.Next
+	}
+	pp := dummy
+	for p != nil {
+		pp = pp.Next
+		p = p.Next
+	}
+	// 删除pp的下一个节点
+	pp.Next = pp.Next.Next
+	return dummy.Next
+}

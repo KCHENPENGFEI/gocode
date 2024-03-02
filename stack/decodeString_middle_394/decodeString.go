@@ -103,3 +103,37 @@ func decodeString1(s string) string {
 	}
 	return result
 }
+
+// decodeString2
+//
+//	@Description: 二刷
+//	@param s
+//	@return string
+func decodeString2(s string) string {
+	var numStack []int
+	var strStack []string
+
+	curNum, curStr := 0, ""
+	for _, c := range s {
+		if c >= '0' && c <= '9' {
+			curNum = curNum*10 + int(c-'0')
+		} else if c == '[' {
+			// 压入栈中，并且清空当前处理变量
+			numStack = append(numStack, curNum)
+			curNum = 0
+			strStack = append(strStack, curStr)
+			curStr = ""
+		} else if c == ']' {
+			// 处理数据出栈
+			// 先弹出数字
+			count := numStack[len(numStack)-1]
+			numStack = numStack[:len(numStack)-1]
+			// 在弹出字符串
+			curStr = strStack[len(strStack)-1] + strings.Repeat(curStr, count)
+			strStack = strStack[:len(strStack)-1]
+		} else {
+			curStr += string(c)
+		}
+	}
+	return curStr
+}

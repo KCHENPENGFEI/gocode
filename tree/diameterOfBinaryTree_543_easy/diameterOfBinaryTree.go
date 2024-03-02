@@ -32,17 +32,18 @@ func main() {
 //	@return int
 func diameterOfBinaryTree(root *TreeNode) int {
 	var ans int
-	help(root, &ans)
+	depth(root, &ans)
 	return ans
 }
 
-func help(root *TreeNode, ans *int) int {
+func depth(root *TreeNode, ans *int) int {
 	if root == nil {
 		return 0
 	}
-	l := help(root.Left, ans)
-	r := help(root.Right, ans)
-	// 计算经过当前root的直径
+	// 计算左右子树的树高
+	l := depth(root.Left, ans)
+	r := depth(root.Right, ans)
+	// 经过当前根节点的直径为两边子树的树高之和
 	*ans = maxTwo(*ans, l+r)
 	// 返回树高
 	return maxTwo(l, r) + 1

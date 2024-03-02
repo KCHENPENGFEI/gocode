@@ -21,140 +21,37 @@ func main() {
 	fmt.Println(search(nums, target))
 }
 
-// search
-//
-//	@Description: 二分法，难点在于判断何时向左分，何时向右分
-//	@param nums
-//	@param target
-//	@return int
 func search(nums []int, target int) int {
-	if len(nums) == 1 {
-		if target == nums[0] {
-			return 0
-		}
-		return -1
-	}
-
-	head := nums[0]
-	tail := nums[len(nums)-1]
-	if head < tail {
-		return searchInOrder(nums, target, 0, len(nums)-1)
-	}
-	if target == head {
-		return 0
-	} else if target < head {
-		// 在右半边
-		l := 0
-		r := len(nums) - 1
-		for l < r {
-			m := (l + r) / 2
-			if nums[m] == target {
-				return m
-			}
-			if nums[m] > target && nums[m] > nums[r] {
-				// 还在右半边
-				l = m + 1
-			} else if nums[m] > target && nums[m] < nums[r] {
-				r = m
-			} else if nums[m] < target && nums[m] > nums[r] {
-
-			} else {
-				return searchInOrder(nums, target, m+1, r)
-			}
-		}
-		if nums[r] == target {
-			return r
-		}
-		return -1
-	} else {
-		// 在左半边
-		l := 0
-		r := len(nums) - 1
-		for l < r {
-			m := (l + r) / 2
-			if nums[m] == target {
-				return m
-			}
-			if nums[m] > target && nums[l] < nums[m] {
-				return searchInOrder(nums, target, l, m)
-			} else if nums[m] > target && nums[l] > nums[m] {
-
-			} else if nums[m] < target && nums[l] < nums[m] {
-				l = m + 1
-			} else {
-				r = m
-			}
-		}
-		if nums[r] == target {
-			return r
-		}
-		return -1
-	}
-}
-
-func searchInOrder(nums []int, target int, start, end int) int {
-	for start < end {
-		m := (start + end) / 2
-		if nums[m] == target {
-			return m
-		}
-		if nums[m] < target {
-			start = m + 1
-		} else {
-			end = m
-		}
-	}
-	if nums[end] == target {
-		return end
-	}
-	return -1
-}
-
-func search1(nums []int, target int) int {
-	if nums[0] <= nums[len(nums)-1] {
-		return searchInOrder1(nums, target)
-	}
-	kIndex := findK(nums)
-	fmt.Println(kIndex)
-	if target <= nums[len(nums)-1] {
-		// 右边
-		index := searchInOrder1(nums[kIndex:], target)
-		if index == -1 {
-			return -1
-		}
-		return index + kIndex
-	} else {
-		return searchInOrder1(nums[:kIndex], target)
-	}
-}
-
-// 找到最小值的坐标
-func findK(nums []int) int {
+	// 要做两次判断
+	// 一次判断当前mid在左半段还是右半段内
+	// 一次判断当前mid和target之间关系
 	l, r := 0, len(nums)-1
 	for l < r {
-		mid := l + (r-l)/2
-		if nums[mid] < nums[r] {
-			// 左边
-			r = mid
-		} else {
-			l = mid + 1
-		}
-	}
-	return l
-}
-
-func searchInOrder1(nums []int, target int) int {
-	l, r := 0, len(nums)-1
-	for l <= r {
 		mid := l + (r-l)/2
 		if nums[mid] == target {
 			return mid
 		}
-		if nums[mid] < target {
-			l = mid + 1
+		// 判断在哪半段
+		if nums[mid] >= nums[l] {
+			// 左半段
+			if target > nums[mid] || target < nums[l] {
+				// 有两种情况需要l右移
+				l = mid + 1
+			} else {
+				r = mid
+			}
 		} else {
-			r = mid - 1
+			// 右半段
+			if target > nums[mid] && target < nums[l] {
+				// 有两种情况需要l右移
+				l = mid + 1
+			} else {
+				r = mid
+			}
 		}
+	}
+	if nums[l] == target {
+		return l
 	}
 	return -1
 }

@@ -15,40 +15,44 @@ func main() {
 }
 
 func letterCombinations(digits string) []string {
-	lettersMap := map[byte]string{
-		'2': "abc",
-		'3': "def",
-		'4': "ghi",
-		'5': "jkl",
-		'6': "mno",
-		'7': "pqrs",
-		'8': "tuv",
-		'9': "wxyz",
+	m := map[byte][]byte{
+		'2': {'a', 'b', 'c'},
+		'3': {'d', 'e', 'f'},
+		'4': {'g', 'h', 'i'},
+		'5': {'j', 'k', 'l'},
+		'6': {'m', 'n', 'o'},
+		'7': {'p', 'q', 'r', 's'},
+		'8': {'t', 'u', 'v'},
+		'9': {'w', 'x', 'y', 'z'},
 	}
-	var (
-		res   []string
-		track []byte
-	)
 	if digits == "" {
 		return nil
 	}
-	dfs(&res, 0, len(digits), track, digits, lettersMap)
-	return res
-
+	var path []byte
+	result := new([]string)
+	trackback(digits, 0, m, path, result)
+	return *result
 }
 
-func dfs(result *[]string, start, n int, track []byte, digits string, lettersMap map[byte]string) {
-	if len(track) == n {
-		*result = append(*result, string(track))
+// trackback
+//
+//	@Description: 通过index来确定每次递归时候的数字位置下标
+//	@param digits
+//	@param index
+//	@param m
+//	@param path
+//	@param res
+func trackback(digits string, index int, m map[byte][]byte, path []byte, res *[]string) {
+	if len(path) == len(digits) {
+		s := string(path)
+		*res = append(*res, s)
 		return
 	}
-	// 两次循环，外层循环迭代数字，内层循环迭代字母
-	for i := start; i < n; i++ {
-		letters := lettersMap[digits[i]]
-		for j := 0; j < len(letters); j++ {
-			track = append(track, letters[j])
-			dfs(result, i+1, n, track, digits, lettersMap)
-			track = track[:len(track)-1]
-		}
+
+	num := digits[index]
+	for _, c := range m[num] {
+		path = append(path, c)
+		trackback(digits, index+1, m, path, res)
+		path = path[:len(path)-1]
 	}
 }

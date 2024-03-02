@@ -46,3 +46,32 @@ func levelOrder(root *TreeNode) [][]int {
 	}
 	return result
 }
+
+// levelOrder2
+//
+//	@Description: 二刷
+//	@param root
+//	@return [][]int
+func levelOrder2(root *TreeNode) [][]int {
+	if root == nil {
+		return nil
+	}
+	var result [][]int
+	var queue = []*TreeNode{root}
+	for len(queue) > 0 {
+		var tmp []*TreeNode
+		var level []int
+		for _, node := range queue {
+			level = append(level, node.Val)
+			if node.Left != nil {
+				tmp = append(tmp, node.Left)
+			}
+			if node.Right != nil {
+				tmp = append(tmp, node.Right)
+			}
+		}
+		result = append(result, level)
+		queue = tmp
+	}
+	return result
+}

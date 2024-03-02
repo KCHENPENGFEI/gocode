@@ -55,3 +55,41 @@ func reverse(head *ListNode) (*ListNode, *ListNode) {
 	head.Next = nil
 	return newHead, head
 }
+
+// reverseKGroup2
+//
+//	@Description: 二刷
+//	@param head
+//	@param k
+//	@return *ListNode
+func reverseKGroup2(head *ListNode, k int) *ListNode {
+	dummy := new(ListNode)
+	dummy.Next = head
+	pre := dummy
+	cur := head
+	for i := 0; i < k; i++ {
+		if cur != nil {
+			cur = cur.Next
+			pre = pre.Next
+		} else {
+			return head
+		}
+	}
+	// 先断开pre.Next指针
+	pre.Next = nil
+	// 翻转链表
+	newHead, tail := reverseList(head)
+	// 拼接
+	tail.Next = reverseKGroup(cur, k)
+	return newHead
+}
+
+func reverseList(head *ListNode) (*ListNode, *ListNode) {
+	if head == nil || head.Next == nil {
+		return head, head
+	}
+	newHead, _ := reverseList(head.Next)
+	head.Next.Next = head
+	head.Next = nil
+	return newHead, head
+}

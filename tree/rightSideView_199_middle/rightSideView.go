@@ -35,3 +35,33 @@ func rightSideView(root *TreeNode) []int {
 	}
 	return result
 }
+
+// rightSideView2
+//
+//	@Description: 二刷，每层先遍历右子树，然后每层第一个元素就是右视图
+//	@param root
+//	@return []int
+func rightSideView2(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+	var queue = []*TreeNode{root}
+	var result []int
+	for len(queue) > 0 {
+		var level []*TreeNode
+		for i := 0; i < len(queue); i++ {
+			node := queue[i]
+			if i == 0 {
+				result = append(result, node.Val)
+			}
+			if node.Right != nil {
+				level = append(level, node.Right)
+			}
+			if node.Left != nil {
+				level = append(level, node.Left)
+			}
+		}
+		queue = level
+	}
+	return result
+}

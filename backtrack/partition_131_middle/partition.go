@@ -15,7 +15,7 @@ import (
 
 func main() {
 	s := "aab"
-	r := partition(s)
+	r := partition2(s)
 	fmt.Println(r)
 }
 
@@ -55,4 +55,43 @@ func isValid(s string) bool {
 	bs := []byte(s)
 	slices.Reverse(bs)
 	return s == string(bs)
+}
+
+func partition2(s string) [][]string {
+	// 先生成一个dp数组用来表示是否回文
+	// 初始化把所有为都置为true
+	dp := make([][]bool, len(s))
+	for i := 0; i < len(s); i++ {
+		dp[i] = make([]bool, len(s))
+		for j := 0; j < len(s); j++ {
+			dp[i][j] = true
+		}
+	}
+	for i := len(s) - 1; i >= 0; i-- {
+		for j := i + 1; j < len(s); j++ {
+			dp[i][j] = s[i] == s[j] && dp[i+1][j-1]
+		}
+	}
+
+	var path []string
+	result := new([][]string)
+	helper(dp, s, 0, path, result)
+	return *result
+}
+
+func helper(dp [][]bool, s string, index int, path []string, res *[][]string) {
+	if index == len(s) {
+		c := make([]string, len(path))
+		copy(c, path)
+		*res = append(*res, c)
+		return
+	}
+
+	for i := index; i < len(s); i++ {
+		if dp[index][i] {
+			path = append(path, s[index:i+1])
+			helper(dp, s, i+1, path, res)
+			path = path[:len(path)-1]
+		}
+	}
 }

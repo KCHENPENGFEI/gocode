@@ -50,3 +50,48 @@ func dfs(track, candidates []int, start, target int, result *[][]int) {
 		target = target + candidates[i]
 	}
 }
+
+func combinationSum2(candidates []int, target int) [][]int {
+	sort.Ints(candidates)
+	var path []int
+	result := new([][]int)
+	helper(candidates, path, target, 0, 0, result)
+	return *result
+}
+
+// helper
+//
+//	@Description: 二刷，为了防止重复答案生成因此要排序，并且保证每次递归index递增
+//	@param nums
+//	@param path
+//	@param target
+//	@param sum
+//	@param start
+//	@param res
+func helper(nums []int, path []int, target, sum, start int, res *[][]int) {
+	if target == sum {
+		c := make([]int, len(path))
+		copy(c, path)
+		*res = append(*res, c)
+		return
+	}
+
+	for i := start; i < len(nums); i++ {
+		if i > 0 && nums[i] == nums[i-1] {
+			// 重复不再处理
+			continue
+		}
+		if sum+nums[i] > target {
+			// 剪枝
+			return
+		} else {
+			sum += nums[i]
+			path = append(path, nums[i])
+			// start递增
+			helper(nums, path, target, sum, i, res)
+		}
+		// 回退
+		sum -= nums[i]
+		path = path[:len(path)-1]
+	}
+}

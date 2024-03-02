@@ -40,3 +40,33 @@ func dfs(track []int, nums []int, start, n int, res *[][]int) {
 		track = track[:len(track)-1]
 	}
 }
+
+// subsets2
+//
+//	@Description: 二刷
+//	@param nums
+//	@return [][]int
+func subsets2(nums []int) [][]int {
+	result := new([][]int)
+	var path []int
+
+	for i := 0; i <= len(nums); i++ {
+		trackback(nums, 0, i, path, result)
+	}
+	return *result
+}
+
+func trackback(nums []int, start, subLen int, path []int, res *[][]int) {
+	if len(path) == subLen {
+		c := make([]int, subLen)
+		copy(c, path)
+		*res = append(*res, c)
+		return
+	}
+
+	for i := start; i < len(nums); i++ {
+		path = append(path, nums[i])
+		trackback(nums, i+1, subLen, path, res)
+		path = path[:len(path)-1]
+	}
+}

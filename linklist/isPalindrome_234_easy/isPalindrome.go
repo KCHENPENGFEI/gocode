@@ -13,8 +13,8 @@ import (
  */
 
 func main() {
-	l := MakeLinkList([]int{1, 2, 3, 4, 5, 3, 2, 1})
-	fmt.Println(isPalindrome(l))
+	l := MakeLinkList([]int{1, 2, 3, 2, 1})
+	fmt.Println(isPalindrome2(l))
 }
 
 func isPalindrome(head *ListNode) bool {
@@ -54,4 +54,32 @@ func reverseList(head *ListNode) *ListNode {
 	head.Next.Next = head
 	head.Next = nil
 	return newHead
+}
+
+// isPalindrome2
+//
+//	@Description: 二刷
+//	@param head
+//	@return bool
+func isPalindrome2(head *ListNode) bool {
+	// 快慢指针找到中点
+	// 然后翻转后半链表
+	// 对比前后一半的数据是否相同
+	fast, slow := head, head
+	for fast.Next != nil && fast.Next.Next != nil {
+		fast = fast.Next.Next
+		slow = slow.Next
+	}
+	back := slow.Next
+
+	slow.Next = nil
+	newBack := reverseList(back)
+	for head != nil && newBack != nil {
+		if head.Val != newBack.Val {
+			return false
+		}
+		head = head.Next
+		newBack = newBack.Next
+	}
+	return true
 }

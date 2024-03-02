@@ -11,9 +11,9 @@ import (
  */
 
 func main() {
-	m := [][]int{{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}}
-	t := 5
-	fmt.Println(searchMatrix(m, t))
+	m := [][]int{{1}}
+	t := 1
+	fmt.Println(searchMatrix2(m, t))
 }
 
 func searchMatrix(matrix [][]int, target int) bool {
@@ -123,4 +123,53 @@ func search(line []int, target int) bool {
 		}
 	}
 	return false
+}
+
+// searchMatrix2
+//
+//	@Description: 二刷
+//	@param matrix
+//	@param target
+//	@return bool
+func searchMatrix2(matrix [][]int, target int) bool {
+	// 二分找到第一列小于等于target的最后一行
+	row := findRow(matrix, target)
+	fmt.Println(row)
+	fmt.Println(matrix[row][len(matrix[0])-1])
+	if row == -1 || matrix[row][len(matrix[0])-1] < target {
+		return false
+	}
+	// 继续二分查找target
+	return findTarget(matrix[row], target)
+}
+
+func findRow(matrix [][]int, target int) int {
+	l, r := 0, len(matrix)-1
+	for l < r {
+		mid := l + (r-l+1)/2
+		if matrix[mid][0] > target {
+			r = mid - 1
+		} else {
+			l = mid
+		}
+	}
+	if matrix[l][0] > target {
+		return -1
+	}
+	return l
+}
+
+func findTarget(row []int, target int) bool {
+	l, r := 0, len(row)-1
+	for l < r {
+		mid := l + (r-l)/2
+		if row[mid] < target {
+			l = mid + 1
+		} else if row[mid] == target {
+			return true
+		} else {
+			r = mid
+		}
+	}
+	return row[l] == target
 }

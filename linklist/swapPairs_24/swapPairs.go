@@ -47,3 +47,19 @@ func swapPairsLoop(head *ListNode) *ListNode {
 	}
 	return dummy.Next
 }
+
+// swapPairs2
+//
+//	@Description: 二刷递归
+//	@param head
+//	@return *ListNode
+func swapPairs2(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	nextHead := head.Next.Next
+	newHead := head.Next
+	head.Next.Next = head
+	head.Next = swapPairs2(nextHead)
+	return newHead
+}

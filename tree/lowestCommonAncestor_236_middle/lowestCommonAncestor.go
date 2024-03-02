@@ -26,3 +26,27 @@ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 	}
 	return root
 }
+
+// lowestCommonAncestor2
+//
+//	@Description: 二刷
+//	@param root
+//	@param p
+//	@param q
+//	@return *TreeNode
+func lowestCommonAncestor2(root, p, q *TreeNode) *TreeNode {
+	// 分别在root的左树和右树查找p,q
+	// 如果没有找到那就说明p,q分别位于左右子树中，直接返回root即可
+	if root == nil || root == p || root == q {
+		return root
+	}
+	left := lowestCommonAncestor(root.Left, p, q)
+	right := lowestCommonAncestor(root.Right, p, q)
+	if left == nil {
+		return right
+	}
+	if right == nil {
+		return left
+	}
+	return root
+}
